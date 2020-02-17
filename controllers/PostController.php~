@@ -1,0 +1,39 @@
+<?php
+
+class PostController extends AbstractController {
+ 
+	public function actionList(){
+		$numPerPage = 3;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $countRecords = Table::getCountRecords($this->tableName);
+        $totalPages = intval(($countRecords - 1)/$numPerPage)+1;
+        if(empty($page) or $page < 0) $page = 1;
+        if($page > $totalPages) $page = $totalPages;
+		$start = $page*$numPerPage - $numPerPage;
+		$rows = Table::getAllRecords($this->tableName, $start, $numPerPage);
+		$pagination = $this->pagination($page, $totalPages);
+    	$this->render('jokes.html.php', ['rows' => $rows, 'pagination' => $pagination]);	
+	}
+	public function actionAdd(){
+		if(isset($_POST['submit'])){
+		  global $pdo;
+		  $title = $this->test_html($_POST['title']);
+		  $body = $this->test_html($_POST['body']);
+		  if($title == '' || $body == ''){
+		  	$form_error = "Requied fields are empty";
+			$this->render('add.html.php');
+ 		  }
+		  $sql = "INSERT INTO `posts` SET `title` = :title,
+		  `body` = :body, `created` = NOW()";
+		  $stmt = $pdo->prepare($sql);
+		  $stmt->bindValue(':title', $title);
+		  $stmt->bindValue(':body', $body);
+		  $stmt->execute();
+		  $this->redirect('/posts');
+		  exit();
+
+		}
+		$this->render('add.html.php', ['class' => $this->tableName]);
+
+	}
+}
