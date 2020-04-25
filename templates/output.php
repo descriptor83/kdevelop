@@ -17,9 +17,11 @@
     <nav class="login">
       <ul>
         <?php if(User::isLogged()) : ?>
-          <li><a href="<?= User::isAdmin() ? '/admin' : '/cabinet' ?>"><?= ucfirst(User::getUser('name')) ?></a></li>
+          <li><a href="/cabinet"><?= ucfirst(User::getUser('name')) ?></a></li>
           <?php if(!User::isAdmin()) : ?>
           <li><a href="/cart">Cart</a>&nbsp;<span><?= Cart::countCart() ?></span></li>
+          <?php else :?>
+           <li><a href="/admin">Admin Panel</a></li> 
           <?php endif;?>
           <li><a href="/logout">Logout</a></li>
         <?php else : ?>  

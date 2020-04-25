@@ -11,7 +11,7 @@ class GirlController extends AbstractController{
         if($page > $totalPages) $page = $totalPages;
         $start = $page*$numPerPage - $numPerPage;
         $rows = [];
-        $categories = Table::getAllRecords('category');
+        $categories = Table::getAllRecords('categories');
 
         if(isset($_GET['cat'])){
             $cat = (int) $_GET['cat'];

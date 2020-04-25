@@ -1,3 +1,4 @@
+<?php include 'aside.html.php' ?>
 <?php if(isset($girl)) : ?>
   <header>
       <h1>Girl ID : <?= $girl['id'] ?></h1>
@@ -9,12 +10,13 @@
 <?php endif; ?>
 <?php if(isset($error)) : ?>
   <span style="color: red"><?= $error ?></span>
-<?php endif; ?>  
+<?php endif; ?>
+<article>  
 <div style="width:30%; float: left">    
     <img src="<?= isset($girl) ? 'img/'.$girl['img'] : 'img/noimage.png' ?>"
      alt="Photo" width="300" height="450">
 </div>
-<div style="width: 70%; float:left">
+<div style="width:70%; float: right">
 <form enctype="multipart/form-data" class="form-horizontal"
  action="<?= isset($girl) ? "/editgirl?id=".$girl['id'] : "/addgirl" ?>" method="POST">
 <div class="form-group">
@@ -88,4 +90,5 @@
       data-href="/deletegirl?id=<?= $girl['id'] ?>" onclick="confirmDelete()" >Delete</button>
 <?php endif; ?>
 </div>
-<br>
+</article>
+<?php include 'footer.html.php' ?>

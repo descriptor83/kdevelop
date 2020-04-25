@@ -9,17 +9,22 @@ class AdminController extends AbstractController{
         if(!User::isAdmin()){
             $this->render('error.html.php', ['access' => 0]);
         }
-        $this->render('admin.html.php');
+        $this->render('admin/admin.html.php');
     }
     public function actionPosts()
     {
         $posts = Table::getAllRecords('posts');
-        $this->render('admin.html.php', array('posts' => $posts));
+        $this->render('admin/posts.html.php', array('posts' => $posts));
     }
     public function actionGirls()
     {
         $girls = Table::getAllRecords('girls');
-        $this->render('admin.html.php', ['girls' => $girls]);
+        $this->render('admin/girls.html.php', ['girls' => $girls]);
+    }
+    public function actionUsers()
+    {
+        $users = Table::getAllRecords('users');
+        $this->render('admin.html.php', ['users' => $users]);
     }
     public function actionGirledit()
     {
@@ -42,11 +47,11 @@ class AdminController extends AbstractController{
             }
             Table::update($girl);
             $girl = Table::getRecordById('girls', $id);
-            $this->render('editgirl.html.php', ['girl' => $girl]);
+            $this->render('admin/editgirl.html.php', ['girl' => $girl]);
         }
         $id = (int) $_GET['id'];
         $girl = Table::getRecordById('girls',$id);
-        $this->render('editgirl.html.php', ['girl' => $girl]);
+        $this->render('admin/editgirl.html.php', ['girl' => $girl]);
     }
     public function actionPostedit()
     {
@@ -63,7 +68,7 @@ class AdminController extends AbstractController{
         }
         $id = (int)$_GET['id'];
         $post = Table::getRecordById('posts', $id);
-        $this->render('editpost.html.php', array('post' => $post));
+        $this->render('admin/editpost.html.php', array('post' => $post));
     }
     public function actionGirladd()
     {
@@ -71,29 +76,29 @@ class AdminController extends AbstractController{
     		$name = $this->test_html($_POST['name']);
 			if($name == ''){
 				$error = 'Name is empty';
-				$this->render('editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error'));
 			}
 
             $age = (int) $_POST['age'];
 			if($age == 0){
 				$error = 'Age is empty';
-				$this->render('editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error'));
 			}
             $country = $this->test_html($_POST['country']);
 			if($country == ''){
 				$error = 'Country is empty';
-				$this->render('editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error'));
 			}
             $category = (int) $_POST['category'];
 			if($category == 0){
 				$error = 'Category is empty';
-				$this->render('editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error'));
 			}
 
             $price = (float)$_POST['price'];
 			if($price == 0){
 				$error = 'Price is empty';
-				$this->render('editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error'));
 			}
             $girl = new Girl($name,$age,$country,$category,$price);
 
@@ -102,18 +107,18 @@ class AdminController extends AbstractController{
                     $girl->img = $_FILES['image']['name'];
                     if(!Table::uploadThumbnail($_FILES['image']['name'])){
                         $error = "Error creating thumbnail";
-                        $this->render('editgirl.html.php', compact('error'));
+                        $this->render('admin/editgirl.html.php', compact('error'));
                     }
                 } else {
                     $error = 'Error loading iamge';
-                    $this->render('editgirl.html.php', compact('error'));
+                    $this->render('admin/editgirl.html.php', compact('error'));
                 }
             }
             $id = Table::save($girl);
             $this->redirect('/editgirl?id='.$id);
 
     	}
-        $this->render('editgirl.html.php');
+        $this->render('admin/editgirl.html.php');
     }
     public function actionPostadd()
     {

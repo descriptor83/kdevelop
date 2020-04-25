@@ -8,6 +8,7 @@ class User implements Model{
     public $password;
     public $repeat;
     public $registration_date;
+    public $roles;
     
     public function __construct($name, $email, $password, $repeat='', $registration_date='')
     {
@@ -55,8 +56,8 @@ class User implements Model{
         return [
             'name' => $this->name,
             'email' => $this->email,
-            'password' => md5($this->password),
-            'added' => $this->registration_date
+            'password' => $this->password,
+            'registration' => $this->registration_date
         ];
     }
     public static function isLogged()
@@ -81,8 +82,8 @@ class User implements Model{
     public static function isAdmin()
     {
         if(self::isLogged()){
-            $role = self::getUser('role');
-            return $role == 'admin' ? true : false;
+            $role = self::getUser('roles');
+            return $role == 'ROLE_ADMIN' ? true : false;
         } 
         return false;
     }

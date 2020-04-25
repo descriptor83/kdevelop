@@ -36,7 +36,7 @@
     <?php if(isset($user)) : ?>
     <article>
         <p style="font-size: 18px">Email : <?= $user['email'] ?></p>
-        <p style="font-size: 18px">Registered at : <?= $user['added'] ?></p>
+        <p style="font-size: 18px">Registered at : <?= $user['registration'] ?></p>
     </article>
     <?php endif; ?>
     <?php if(isset($orders)) :?>

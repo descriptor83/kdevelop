@@ -1,0 +1,9 @@
+config/
+vendor/
+webroot/tmp
+webroot/img
+webroot/*~
+Autoload.php
+composer.*
+.htaccess
+.project

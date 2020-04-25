@@ -1,0 +1,111 @@
+main {
+  margin: 20px;
+  width: 95%;
+}
+header{
+  text-align: center;
+}
+.login {
+  height: 20px;
+  text-align: right;
+}
+.login ul{
+  list-style-type: none;
+}
+.login li{
+  float: inline-end;
+  margin-right: 20px;
+}
+.login li a{
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+ }
+ .login li span{
+   color: #337ab7;
+   font-size: 12px;
+ }
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+.menu li {
+  float: left;
+}
+.menu li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 16px;
+}
+.menu li a:hover{
+  background-color: #111;
+}
+section{
+  position: relative;
+  float: left;
+  margin-left: 20px;
+
+}
+
+.girl{
+  width: 31%;
+  float: left;
+}
+aside{
+  text-align: right;
+  padding-right: 30px;
+}
+.category{
+  width: 20%;
+  float: left;
+}
+.category ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+.category li a{
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.category li.noadmin:hover{
+   border-left: 1px solid black;
+}
+.active { 
+  background-color: #555;
+   color: white;
+}
+.active > a{
+  color: white !important;
+}
+article{
+  width: 80%;
+  float: left;
+}
+footer{
+  text-align: center;
+}
+.form-horizontal{
+  width: 600px;
+}
+table{
+	width: 600px;
+	margin-left: 40px; 
+}
+
+
+
+
+
+
+
+

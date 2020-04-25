@@ -81,9 +81,9 @@ class UserController extends AbstractController{
                 $this->render('login.html.php', ['errors' => $errors]);
             }
             $user = new User($row[0]['name'], $row[0]['email'],
-             $row[0]['password'], $row[0]['added'] );
+             $row[0]['password'], $row[0]['registration'] );
              $user->id = $row[0]['id'];
-             if($user->password !== md5($password)){
+             if(!password_verify($password, $user->password)){
                  $errors = "Incorrect password";
                  $this->render('login.html.php',['errors' => $errors]);
              }
@@ -96,6 +96,10 @@ class UserController extends AbstractController{
     {
         $this->deleteFromCookie('user');
         $this->redirect('/home');
+    }
+    public function encodePassword($password)
+    {
+        
     }
     
 }
