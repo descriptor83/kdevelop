@@ -1,7 +1,6 @@
 <?php
 
-class User implements Model{
-    public $table;
+class User extends Model{
     public $id;
     public $name;
     public $email;

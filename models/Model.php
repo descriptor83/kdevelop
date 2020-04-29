@@ -1,5 +1,6 @@
 <?php
 
-interface Model{
-    public function exchangeArray ();
+abstract class Model{
+    public $table;
+    abstract function exchangeArray ();
 }

@@ -3,7 +3,7 @@ ini_set('display_errors',1);
 error_reporting(32767);
 
 define('ROOT', dirname(__FILE__));
-define('IMG', '/home/paul/kdevelop.local/webroot/img/');
+//define('IMG', '/home/paul/vhosts/kdevelop.local/webroot/img/');
 //require_once ROOT.'/../vendor/autoload.php';
 require_once ROOT.'/../Autoload.php';
 require_once ROOT.'/../config/db.php';

@@ -30,4 +30,9 @@ function confirmDelete(){
         const btn = document.querySelector('button[class="btn btn-danger"]'),
         href = btn.dataset.href
         window.location.href = href
-    }
+}
+function photoChange(){
+    const inp = document.querySelector('input[type="file"]'),
+    imgLink = window.URL.createObjectURL(inp.files[0])
+    document.querySelector('img[alt="Photo"]').src = imgLink 
+}

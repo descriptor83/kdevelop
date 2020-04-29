@@ -101,7 +101,20 @@ table{
 	width: 600px;
 	margin-left: 40px; 
 }
-
+.adminTable{
+  float: left;
+  width: 30%;
+}
+.adminTable table{
+  width: 100%;
+}
+.adminForm{
+  float: right;
+  width: 40%
+}
+.adminForm form{
+  width: 100%;
+}
 
 
 

@@ -1,7 +1,6 @@
 <?php
 
-class Post implements Model{
-    public $table;
+class Post extends Model{
     public $title;
     public $body;
     public $created;

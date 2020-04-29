@@ -109,7 +109,7 @@ class Table{
             $info = getimagesize($tmp);
             if(preg_match('{image/(.*)}is', $info['mime'], $p)){
                 if($p[1] == 'jpeg' or $p[1] == 'png'){
-                    move_uploaded_file($tmp, IMG.$data['name']);
+                    move_uploaded_file($tmp, ROOT.'/img/'.$data['name']);
                     return true;
                 }
                 return false;
@@ -128,8 +128,11 @@ class Table{
         $stmt->execute();
     }
     public static function uploadThumbnail($fileName, $height = 180, $width = 120, $path = ''){
-        $thumbFile = $path == '' ? IMG.'thumb_'.$fileName : $path.'thumb_'.$fileName;
-        $src_im = imagecreatefromjpeg(IMG.$fileName);
+        $thumbFile = $path === '' ? ROOT.'/img/thumb_'.$fileName : $path.'thumb_'.$fileName;
+        if(!file_exists(ROOT.'/img/'.$fileName)){
+            throw new Exception('File not found');
+        }
+        $src_im = imagecreatefromjpeg(ROOT.'/img/'.$fileName);
         $dst_im = imagecreatetruecolor($width,$height);
         imagecopyresampled($dst_im, $src_im, 0, 0, 0, 0, $width, $height,
         imagesx($src_im) , imagesy($src_im));

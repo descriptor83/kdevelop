@@ -16,7 +16,7 @@
     <img src="<?= isset($girl) ? 'img/'.$girl['img'] : 'img/noimage.png' ?>"
      alt="Photo" width="300" height="450">
 </div>
-<div style="width:70%; float: right">
+<div style="width:65%; float: right">
 <form enctype="multipart/form-data" class="form-horizontal"
  action="<?= isset($girl) ? "/editgirl?id=".$girl['id'] : "/addgirl" ?>" method="POST">
 <div class="form-group">
@@ -36,8 +36,12 @@
   <div class="form-group">
     <label for="country" class="col-sm-2 control-label">Country</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="country"
-       value="<?= isset($girl) ? $girl['country'] : '' ?>" >
+    <select name="country">
+        <?php  foreach($countries as $country) :?>
+          <option <?= isset($girl) and $girl['country'] == $country['id'] ? 'selected' : '' ?>  value="<?= $country['id'] ?>">
+          <?= $country['name'] ?></option>
+           <?php endforeach; ?>    
+      </select> 
     </div>
   </div>
   <div class="form-group">

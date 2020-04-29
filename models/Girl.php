@@ -1,6 +1,6 @@
 <?php
 
-class Girl implements Model{
+class Girl extends Model{
     public $id;
     public $name;
     public $age;
@@ -8,8 +8,7 @@ class Girl implements Model{
     public $category;
     public $img;
     public $price;
-    public $table;
-
+    
     public function __construct($name, $age, $country, $category,$price, $img='noimage.png')
     {
         $this->name = $name;

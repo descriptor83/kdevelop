@@ -26,8 +26,14 @@ class AdminController extends AbstractController{
         $users = Table::getAllRecords('users');
         $this->render('admin.html.php', ['users' => $users]);
     }
+    public function actionCountries()
+    {
+        $countries = Table::getAllRecords('countries');
+        $this->render('admin/countries.html.php', ['countries' => $countries]);
+    }
     public function actionGirledit()
     {
+        $countries = Table::getAllRecords('countries');
         if(isset($_POST['submit'])){
             $id = (int) $_POST['id'];
             $name = $this->test_html($_POST['name']);
@@ -43,15 +49,22 @@ class AdminController extends AbstractController{
             if(isset($_FILES['image']) and $_FILES['image']['size'] > 0){
                 if(Table::uploadImage($_FILES['image'])){
                     $girl->img = $_FILES['image']['name'];
+                    if(!Table::uploadThumbnail($_FILES['image']['name'])){
+                        $error = "Error creating thumbnail";
+                        $this->render('admin/editgirl.html.php', compact('error'));
+                    }
                 }
             }
             Table::update($girl);
             $girl = Table::getRecordById('girls', $id);
-            $this->render('admin/editgirl.html.php', ['girl' => $girl]);
+            
+            $this->render('admin/editgirl.html.php',
+             ['girl' => $girl, 'countries' => $countries]);
         }
         $id = (int) $_GET['id'];
         $girl = Table::getRecordById('girls',$id);
-        $this->render('admin/editgirl.html.php', ['girl' => $girl]);
+        $this->render('admin/editgirl.html.php',
+         ['girl' => $girl, 'countries' => $countries]);
     }
     public function actionPostedit()
     {
@@ -72,33 +85,34 @@ class AdminController extends AbstractController{
     }
     public function actionGirladd()
     {
+        $countries = Table::getAllRecords('countries');
     	if(isset($_POST['submit'])){
     		$name = $this->test_html($_POST['name']);
 			if($name == ''){
 				$error = 'Name is empty';
-				$this->render('admin/editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error','countries'));
 			}
 
             $age = (int) $_POST['age'];
 			if($age == 0){
 				$error = 'Age is empty';
-				$this->render('admin/editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error','countries'));
 			}
             $country = $this->test_html($_POST['country']);
 			if($country == ''){
 				$error = 'Country is empty';
-				$this->render('admin/editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error','countries'));
 			}
             $category = (int) $_POST['category'];
 			if($category == 0){
 				$error = 'Category is empty';
-				$this->render('admin/editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error','countries'));
 			}
 
             $price = (float)$_POST['price'];
 			if($price == 0){
 				$error = 'Price is empty';
-				$this->render('admin/editgirl.html.php', compact('error'));
+				$this->render('admin/editgirl.html.php', compact('error','countries'));
 			}
             $girl = new Girl($name,$age,$country,$category,$price);
 
@@ -118,7 +132,7 @@ class AdminController extends AbstractController{
             $this->redirect('/editgirl?id='.$id);
 
     	}
-        $this->render('admin/editgirl.html.php');
+        $this->render('admin/editgirl.html.php', ['countries' => $countries]);
     }
     public function actionPostadd()
     {
@@ -146,6 +160,25 @@ class AdminController extends AbstractController{
         }
         $this->render('editpost.html.php');
     }
+    public function actionCountryadd()
+    {
+        if(isset($_POST['submit'])){
+            $id = $this->test_html($_POST['id']);
+            $name = $this->test_html($_POST['name']);
+            if(empty($id) or empty($name)){
+                $this->render('admin/countries.html.php', ['error' => 'Field is empty']);
+            }
+            $country = new Country($id, $name);
+            try{
+                Table::save($country);
+             } catch(PDOException $e){
+                 session_start();
+                 $_SESSION['error'] = $e->getMessage();
+                 $this->redirect('/admincountries');
+             }
+            $this->redirect('/admincountries');
+        }
+    }
 	public function actionGirldelete()
     {
         $id = (int) $_GET['id'];
@@ -154,7 +187,7 @@ class AdminController extends AbstractController{
         $row['category'], $row['price'], $row['img']);
         $girl->id = $id;
         if($girl->img != 'noimage.jpg'){
-            $path = IMG.$girl->img;
+            $path = ROOT.'/img/'.$girl->img;
             if(file_exists($path)){
                 unlink($path);
             }

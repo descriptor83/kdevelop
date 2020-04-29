@@ -1,12 +1,12 @@
 <?php
 
-class Order implements Model{
+class Order extends Model{
     public $id;
     public $user_id;
     public $date;
     public $total;
     public $done;
-    public $table;
+    
 
     public function __construct($usr_id, $total, $date = '')
     {

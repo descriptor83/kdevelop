@@ -33,6 +33,18 @@
                          <li><a href="/addorder">Add</a></li>
                      </ul>
                  </li>
+                 <li>Countries
+                     <ul>
+                         <li><a href="/admincountries">List</a></li>
+                         <li><a href="/addcountry">Add</a></li>
+                     </ul>
+                 </li>
+                 <li>Categories
+                     <ul>
+                         <li><a href="/admincategories">List</a></li>
+                         <li><a href="/addcategory">Add</a></li>
+                     </ul>
+                 </li>
                </ul>
             </li>
         </ul>  
