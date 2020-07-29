@@ -15,13 +15,29 @@ class GirlController extends AbstractController{
 
         if(isset($_GET['cat'])){
             $cat = (int) $_GET['cat'];
-            $rows = Table::getRecordsByColumn($this->tableName, 'category', $cat);
-            $this->render('girls.html.php', ['rows' => $rows,
+            $rows = [];
+            $girls = Table::getRecordsByColumn($this->tableName, 'category', $cat);
+            foreach ($girls as $girl) {
+                $country = Table::getRecordById('countries', $girl['country']);
+                $girl['country'] = $country['name'];
+                $category = Table::getRecordById('categories', $girl['category']);
+                $girl['category'] = $category['name'];
+                $rows[] = $girl;
+            }
+            $this->render('girls.html.php', ['girls' => $rows,
             'categories' => $categories, 'cat' => $cat]);
         } else {
-		    $rows = Table::getAllRecords($this->tableName, $start, $numPerPage);
+            $rows = [];
+		        $girls = Table::getAllRecords($this->tableName, $start, $numPerPage);
+        foreach ($girls as $girl) {
+              $country = Table::getRecordById('countries', $girl['country']);
+              $girl['country'] = $country['name'];
+              $category = Table::getRecordById('categories', $girl['category']);
+              $girl['category'] = $category['name'];
+              $rows[] = $girl;
+        }
             $pagination = $this->pagination($page, $totalPages);
-            $this->render('girls.html.php', ['rows' => $rows,
+            $this->render('girls.html.php', ['girls' => $rows,
             'pagination' => $pagination, 'categories' => $categories]);
         }
     }

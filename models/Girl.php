@@ -8,7 +8,7 @@ class Girl extends Model{
     public $category;
     public $img;
     public $price;
-    
+
     public function __construct($name, $age, $country, $category,$price, $img='noimage.png')
     {
         $this->name = $name;
@@ -22,13 +22,14 @@ class Girl extends Model{
     public function exchangeArray()
     {
         return [
-            
+
             'name' => $this->name,
             'age' => $this->age,
             'country' => $this->country,
             'category' => $this->category,
             'img' => $this->img,
-            'price' => $this->price           
+            'price' => $this->price
         ];
     }
+
 }

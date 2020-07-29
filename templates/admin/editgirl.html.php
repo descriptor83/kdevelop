@@ -1,4 +1,5 @@
 <?php include 'aside.html.php' ?>
+
 <?php if(isset($girl)) : ?>
   <header>
       <h1>Girl ID : <?= $girl['id'] ?></h1>
@@ -6,13 +7,13 @@
 <?php else : ?>
   <header>
     <h1>Add new girl</h1>
-  </header>  
+  </header>
 <?php endif; ?>
 <?php if(isset($error)) : ?>
   <span style="color: red"><?= $error ?></span>
 <?php endif; ?>
-<article>  
-<div style="width:30%; float: left">    
+<article>
+<div style="width:30%; float: left">
     <img src="<?= isset($girl) ? 'img/'.$girl['img'] : 'img/noimage.png' ?>"
      alt="Photo" width="300" height="450">
 </div>
@@ -25,7 +26,7 @@
       <input type="text" class="form-control" name="name"
         value="<?= isset($girl) ? $girl['name'] : '' ?>" >
     </div>
-  </div>  
+  </div>
 <div class="form-group">
     <label for="age" class="col-sm-2 control-label">Age</label>
     <div class="col-sm-10">
@@ -37,11 +38,13 @@
     <label for="country" class="col-sm-2 control-label">Country</label>
     <div class="col-sm-10">
     <select name="country">
+      <?php if(isset($girl)) : ?>
         <?php  foreach($countries as $country) :?>
-          <option <?= isset($girl) and $girl['country'] == $country['id'] ? 'selected' : '' ?>  value="<?= $country['id'] ?>">
+          <option <?= $girl['country'] === $country['id'] ? 'selected' : '' ?>  value="<?= $country['id'] ?>">
           <?= $country['name'] ?></option>
-           <?php endforeach; ?>    
-      </select> 
+           <?php endforeach; ?>
+        <?php endif; ?>
+      </select>
     </div>
   </div>
   <div class="form-group">
@@ -58,22 +61,20 @@
     </div>
   </div>
   <div class="form-group">
-      
+
       <div class="col-sm-10">
       <label for="category">Type</label>
       <?php if(isset($girl)) : ?>
       <select name="category">
-          <option <?= $girl['category'] == 1 ? 'selected' : '' ?> value="1">Блондинка</option>
-          <option <?= $girl['category'] == 2 ? 'selected' : '' ?> value="2">Брюнетка</option>
-          <option <?= $girl['category'] == 3 ? 'selected' : '' ?> value="3">Шатенка</option>
-          <option <?= $girl['category'] == 4 ? 'selected' : '' ?> value="4">Рыжая</option>
-      </select>
+      <?php foreach($categories as $category) : ?>
+          <option <?= $girl['category'] === $category['id'] ? 'selected' : '' ?> value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+      <?php endforeach; ?>
+        </select>
       <?php else : ?>
         <select name="category">
-          <option value="1">Блондинка</option>
-          <option value="2">Брюнетка</option>
-          <option value="3">Шатенка</option>
-          <option value="4">Рыжая</option>
+          <?php foreach($categories as $category) : ?>
+          <option value="<?= $category['id']?>"><?= $category['name'] ?></option>
+          <?php endforeach; ?>
       </select>
       <?php endif; ?>
       </div>
@@ -83,14 +84,14 @@
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" name="submit" class="btn btn-default">Save</button>
-     
+
     </div>
   </div>
 </form>
-  
+
 <a class="btn btn-link" href="/admingirls">Back</a>
 <?php if(isset($girl)) : ?>
-      <button class="btn btn-danger" 
+      <button class="btn btn-danger"
       data-href="/deletegirl?id=<?= $girl['id'] ?>" onclick="confirmDelete()" >Delete</button>
 <?php endif; ?>
 </div>

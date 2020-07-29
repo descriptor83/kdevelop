@@ -8,7 +8,7 @@ class User extends Model{
     public $repeat;
     public $registration_date;
     public $roles;
-    
+
     public function __construct($name, $email, $password, $repeat='', $registration_date='')
     {
         $date = new DateTime();
@@ -38,8 +38,8 @@ class User extends Model{
     {
         if($this->password == $this->repeat)
             return true;
-        else 
-            return false;    
+        else
+            return false;
     }
     public function checkEmail()
     {
@@ -55,7 +55,7 @@ class User extends Model{
         return [
             'name' => $this->name,
             'email' => $this->email,
-            'password' => $this->password,
+            'password' => password_hash($this->password, PASSWORD_DEFAULT),
             'registration' => $this->registration_date
         ];
     }
@@ -83,7 +83,7 @@ class User extends Model{
         if(self::isLogged()){
             $role = self::getUser('roles');
             return $role == 'ROLE_ADMIN' ? true : false;
-        } 
+        }
         return false;
     }
 }

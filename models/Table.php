@@ -5,24 +5,28 @@ class Table{
     {
         global $pdo;
         $postList = [];
-       
-        
+
+
         if($start !== null){
             $sql = "SELECT * FROM `{$table}` LIMIT $start, $num";
         }
         else{
             $sql = "SELECT * FROM `{$table}`";
 
-        }    
+        }
         $result = $pdo->query($sql);
-        while ($row = $result->fetch()) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $postList[] = $row;
         }
         return $postList;
     }
     public static function getRecordById($table, $id){
         global $pdo;
-        $sql = "SELECT * FROM `{$table}` WHERE `id` = {$id}";
+        if(is_int($id)){
+          $sql = "SELECT * FROM `{$table}` WHERE `id` = {$id}";
+      } else {
+          $sql = "SELECT * FROM `{$table}` WHERE `id` = '{$id}'";
+      }
         $result = $pdo->query($sql);
         $row = $result->fetch();
         return $row;
@@ -47,16 +51,16 @@ class Table{
             }
             return $list;
         }
-        return []; 
+        return [];
     }
     public static function getRecordsByColumn($table, $where, $param)
     {
         global $pdo;
-        
+
         if(is_int($where))
             $sql = "SELECT * FROM `{$table}` WHERE `{$where}` = {$param}";
         else
-            $sql = "SELECT * FROM `{$table}` WHERE `{$where}` = '{$param}'";    
+            $sql = "SELECT * FROM `{$table}` WHERE `{$where}` = '{$param}'";
         $result = $pdo->query($sql);
         if($result){
              $list = $result->fetchAll();
@@ -79,7 +83,7 @@ class Table{
         }
         $stmt->execute();
         return $pdo->lastInsertId();
-        
+
     }
     public static function update(Model $obj)
     {
@@ -97,11 +101,11 @@ class Table{
         }
         $stmt->bindValue(':id', $obj->id);
         $stmt->execute();
-        
+
     }
     public static function uploadImage(array $data){
         $tmp = $data['tmp_name'];
-        
+
         if($data['error'] != 0) {
             return false;
         }
@@ -142,5 +146,5 @@ class Table{
             return false;
         }
     }
-   
+
 }

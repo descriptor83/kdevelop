@@ -19,7 +19,15 @@ class AdminController extends AbstractController{
     public function actionGirls()
     {
         $girls = Table::getAllRecords('girls');
-        $this->render('admin/girls.html.php', ['girls' => $girls]);
+        $rows = [];
+        foreach ($girls as $girl) {
+          $country = Table::getRecordById('countries', $girl['country']);
+          $girl['country'] = $country['name'];
+          $category = Table::getRecordById('categories', $girl['category']);
+          $girl['category'] = $category['name'];
+          $rows[] = $girl;
+        }
+        $this->render('admin/girls.html.php', ['girls' => $rows]);
     }
     public function actionUsers()
     {
@@ -31,9 +39,15 @@ class AdminController extends AbstractController{
         $countries = Table::getAllRecords('countries');
         $this->render('admin/countries.html.php', ['countries' => $countries]);
     }
+    public function actionCategories()
+    {
+        $categories = Table::getAllRecords('categories');
+        $this->render('admin/categories.html.php', ['categories' => $categories]);
+    }
     public function actionGirledit()
     {
         $countries = Table::getAllRecords('countries');
+        $categories = Table::getAllRecords('categories');
         if(isset($_POST['submit'])){
             $id = (int) $_POST['id'];
             $name = $this->test_html($_POST['name']);
@@ -57,14 +71,14 @@ class AdminController extends AbstractController{
             }
             Table::update($girl);
             $girl = Table::getRecordById('girls', $id);
-            
+
             $this->render('admin/editgirl.html.php',
-             ['girl' => $girl, 'countries' => $countries]);
+             ['girl' => $girl, 'countries' => $countries, 'categories' => $categories]);
         }
         $id = (int) $_GET['id'];
         $girl = Table::getRecordById('girls',$id);
         $this->render('admin/editgirl.html.php',
-         ['girl' => $girl, 'countries' => $countries]);
+         ['girl' => $girl, 'countries' => $countries, 'categories' => $categories]);
     }
     public function actionPostedit()
     {
@@ -86,33 +100,34 @@ class AdminController extends AbstractController{
     public function actionGirladd()
     {
         $countries = Table::getAllRecords('countries');
+        $categories = Table::getAllRecords('categories');
     	if(isset($_POST['submit'])){
     		$name = $this->test_html($_POST['name']);
 			if($name == ''){
 				$error = 'Name is empty';
-				$this->render('admin/editgirl.html.php', compact('error','countries'));
+				$this->render('admin/addgirl.html.php', compact('error','countries','categories'));
 			}
 
             $age = (int) $_POST['age'];
 			if($age == 0){
 				$error = 'Age is empty';
-				$this->render('admin/editgirl.html.php', compact('error','countries'));
+				$this->render('admin/addgirl.html.php', compact('error','countries','categories'));
 			}
             $country = $this->test_html($_POST['country']);
 			if($country == ''){
 				$error = 'Country is empty';
-				$this->render('admin/editgirl.html.php', compact('error','countries'));
+				$this->render('admin/addgirl.html.php', compact('error','countries','categories'));
 			}
             $category = (int) $_POST['category'];
 			if($category == 0){
 				$error = 'Category is empty';
-				$this->render('admin/editgirl.html.php', compact('error','countries'));
+				$this->render('admin/addgirl.html.php', compact('error','countries','categories'));
 			}
 
             $price = (float)$_POST['price'];
 			if($price == 0){
 				$error = 'Price is empty';
-				$this->render('admin/editgirl.html.php', compact('error','countries'));
+				$this->render('admin/addgirl.html.php', compact('error','countries','categories'));
 			}
             $girl = new Girl($name,$age,$country,$category,$price);
 
@@ -121,18 +136,18 @@ class AdminController extends AbstractController{
                     $girl->img = $_FILES['image']['name'];
                     if(!Table::uploadThumbnail($_FILES['image']['name'])){
                         $error = "Error creating thumbnail";
-                        $this->render('admin/editgirl.html.php', compact('error'));
+                        $this->render('admin/addgirl.html.php', compact('error','countries','categories'));
                     }
                 } else {
                     $error = 'Error loading iamge';
-                    $this->render('admin/editgirl.html.php', compact('error'));
+                    $this->render('admin/addgirl.html.php', compact('error','countries','categories'));
                 }
             }
             $id = Table::save($girl);
-            $this->redirect('/editgirl?id='.$id);
+            $this->redirect('/admingirls');
 
     	}
-        $this->render('admin/editgirl.html.php', ['countries' => $countries]);
+        $this->render('admin/addgirl.html.php', compact('countries','categories'));
     }
     public function actionPostadd()
     {
@@ -155,7 +170,7 @@ class AdminController extends AbstractController{
             $post = new Post($title, $body, $created);
             $id = Table::save($post);
             $this->redirect('/editpost?id='.$id);
-            
+
 
         }
         $this->render('editpost.html.php');
@@ -178,6 +193,59 @@ class AdminController extends AbstractController{
              }
             $this->redirect('/admincountries');
         }
+    }
+    public function actionCategoryadd()
+    {
+        if(isset($_POST['submit'])){
+
+            $name = $this->test_html($_POST['name']);
+            $cat = Table::getRecordsByColumn('categories','name',$name);
+            if(empty($name)){
+                $this->saveInSession('Empty name field','/admincategories');
+            }
+
+            if($cat){
+                $this->saveInSession('Category already exists', '/admincategories');
+            }
+            $category = new Category($name);
+            try{
+                Table::save($category);
+             } catch(PDOException $e){
+                 $this->saveInSession($e->getMessage(),'/admincategories');
+             }
+            $this->redirect('/admincategories');
+
+        }
+    }
+    public function actionCategoryedit()
+    {
+
+        if(isset($_POST['submit'])){
+            $id = (int)$_POST['id'];
+            $name = $this->test_html($_POST['name']);
+            if(empty($name)){
+                $this->saveInSession('Name is empty', '/editcategory?id='.$id);
+            }
+            $category = new Category($name);
+            $category->id = $id;
+        try {
+            Table::update($category);
+        } catch (PDOException $e) {
+            $this->saveInSession($e->getMessage(), '/editcategory?id='.$id);
+        }
+        $this->redirect('/admincategories');
+        }
+        $id = (int)$_GET['id'];
+        $category = Table::getRecordById('categories', $id);
+        $this->render('admin/editcategory.html.php', ['category' => $category]);
+    }
+    public function actionCategorydelete()
+    {
+        $id = (int)$_GET['id'];
+        $category = new Category('name');
+        $category->id = $id;
+        Table::delete($category);
+        $this->redirect('/admincategories');
     }
 	public function actionGirldelete()
     {

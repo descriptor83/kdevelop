@@ -60,6 +60,12 @@ class AbstractController{
     {
         setcookie($name,$value, time()+60*60);
     }
+    public function saveInSession(string $message, string $route, string $key = 'error')
+    {
+        session_start();
+        $_SESSION[$key] = $message;
+        $this->redirect($route); exit;
+    }
     public function deleteFromCookie($name)
     {
         setcookie($name, '', time()-60);

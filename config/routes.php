@@ -1,0 +1,48 @@
+<?php
+
+return array(
+  
+  'home' => 'home/index',
+  '^posts' => 'post/list',
+  '^girls' => 'girl/list',
+  'detail' => 'girl/detail',
+  'find' => 'post/find',
+  '^add$' => 'post/add',
+  'register' => 'user/register',
+  'login' => 'user/login',
+  'logout' => 'user/logout',
+  '^cabinet$' => 'cabinet/index',
+  '^cabinetall$' => 'cabinet/allorders',
+  '^cabinetlast$' => 'cabinet/lastorder',
+  '^cabinetorder[?]id=\d*' => 'cabinet/orderdetails',
+  'tocart[?]id=\d+' => 'cart/add',
+  'delete[?]id=\d+' => 'cart/delete',
+  'clear' => 'cart/clear',
+  '^admin$' => 'admin/index',
+  '^adminposts$' => 'admin/posts',
+  '^admingirls$' => 'admin/girls',
+  '^adminusers$' => 'admin/users',
+  '^adminorders$' => 'admin/orders',
+  '^admincountries$' => 'admin/countries',
+  '^admincategories$' => 'admin/categories',
+  'editgirl[?]id=\d+' => 'admin/girledit',
+  'editpost[?]id=\d+' => 'admin/postedit',
+  'edituser[?]id=\d+' => 'admin/useredit',
+  'editcountry[?]id=\d+' => 'admin/countryedit',
+  'editcategory[?]id=\d+' => 'admin/categoryedit',
+  'addgirl' => 'admin/girladd',
+  'addpost' => 'admin/postadd',
+  'adduser' => 'admin/useradd',
+  'addcategory' => 'admin/categoryadd',
+  'addcountry' => 'admin/countryadd',
+  'deletegirl[?]id=\d' => 'admin/girldelete',
+  'deletepost[?]id=\d' => 'admin/postdelete',
+  'deleteuser[?]id=\d+' => 'admin/userdelete',
+  'deletecategory[?]id=\d+' => 'admin/categorydelete',
+  'deletecountry[?]id=\d+' => 'admin/countrydelete',
+  'cart' => 'cart/index',
+  '^order$' => 'cart/order',
+  'success' => 'cart/success'
+  
+  
+);
